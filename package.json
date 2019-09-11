@@ -4,7 +4,8 @@
   "description": "interview test",
   "main": "index.js",
   "dependencies": {
-    "node-modules": "^1.0.1"
+    "node-modules": "^1.0.1",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {},
   "scripts": {
