@@ -1,10 +1,10 @@
-
+const argv = require('yargs').argv;
 let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';   //to be hidden
-let city = 'china';
+let city = argv.c || 'Hangzhou';
 let units = 'metric';
 let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`
 
-let request = require('request');
+const request = require('request');
 
 request(url, function (err, response, body) {
   if(err){
