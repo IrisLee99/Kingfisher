@@ -1,0 +1,23 @@
+{
+  "name": "simple-nodejs-weather-app",
+  "version": "1.0.0",
+  "description": "interview test",
+  "main": "index.js",
+  "dependencies": {
+    "node-modules": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IrisLee99/Kingfisher.git"
+  },
+  "author": "Iris Jie Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IrisLee99/Kingfisher/issues"
+  },
+  "homepage": "https://github.com/IrisLee99/Kingfisher#readme"
+}
