@@ -1,18 +1,20 @@
 # Kingfisher
 web dev test
 
-
-Entry point: index.js
+entry point: index.js
+open libs: node-modules: to use common modules such as "require" 
+           yargs: command line interface tool
+3rd party API: openweathermap.org      
 
 Usage:
 #1. Get Weather by City Name
 node index.js -c {city}
 
 example:$node index.js -c Shenzhen
-return Temperature today is 303.22 degrees in
+return: Temperature today is 303.22 degrees in
                Shenzhen!
 
-               
+
 #2. Get Forecast by City Name
 node index.js -c {city}
 
