@@ -32,7 +32,7 @@ router.post('/weather', function(req, res, next){
         } else {
             let weather = JSON.parse(body);
             let country = (weather.sys.country) ? weather.sys.country : '' ;
-            let message = `Temperature today is ${weather.main.temp} degrees in
+            let message = ` is ${weather.main.temp} degrees in
                         ${weather.name}, ${country}!`;
                         
             //console.log(weather);
@@ -47,7 +47,7 @@ router.post('/weather', function(req, res, next){
 });
 
 /* POST result page - forecast*/  
-router.post('/forecast', function(req, res, next){
+/*router.post('/forecast', function(req, res, next){
     let city = req.body.city;
     url = weather_url + city + "&units=" + units + "&appid=" + apiKey;    
     //console.log(url);
@@ -70,6 +70,6 @@ router.post('/forecast', function(req, res, next){
     }
     });
 
-});
+});*/
 
 module.exports = router;
