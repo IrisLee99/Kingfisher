@@ -30,36 +30,46 @@ router.post('/weather', function(req, res, next){
         if(err){
         console.log('error:', error);
         } else {
-        let weather = JSON.parse(body);
-        let message = `Temperature today is ${weather.main.temp} degrees in
-                    ${weather.name}, ${weather.sys.country}!`;
-        console.log(message);
+            let weather = JSON.parse(body);
+            let country = (weather.sys.country) ? weather.sys.country : '' ;
+            let message = `Temperature today is ${weather.main.temp} degrees in
+                        ${weather.name}, ${country}!`;
+                        
+            console.log(weather);
+            console.log(message);
+
+            let comments = "For city "+city+', country '+country;
+
+            res.render('index', {body : weather, comments : comments});
         }
     });
-
-    res.render('index', {body : body, weather: weather});
 
 });
 
 /* POST result page - forecast*/  
-
-/*router.post('/forecast', function(req, res, next){
+router.post('/forecast', function(req, res, next){
     let city = req.body.city;
-    url = url+city+"&"+appId;  
+    url = weather_url + city + "&units=" + units + "&appid=" + apiKey;    
+    //console.log(url);
 
-    forecast_request(forecast_url, function (err, response, body) {
+    forecast_request(url, function (err, response, body) {
     if(err){
         console.log('error:', error);
     } else {
-        let forecast = JSON.parse(body);
+        let body = JSON.parse(body);
+
         var i;
-            for (i = 0; i < forecast.list.length; i++) { 
-                let date = lib.DateFormatter(forecast.list[i].dt);
-                let message = `Temperature forecast in 5 day is ${forecast.list[i].main.temp} degrees in
-                        ${forecast.city.name} at ${date}!`;
-                console.log(message);
-            };
+        for (i = 0; i < body.list.length; i++) { 
+            let date = lib.DateFormatter(body.list[i].dt);
+            let message = `Temperature forecast in 5 day is ${body.list[i].main.temp} degrees in
+                    ${body.city.name} at ${date}, ${body.sys.country}!`;
+            console.log(message);
+        }
+
+        res.render('index', {body : body});
     }
     });
-}*/
+
+});
+
 module.exports = router;

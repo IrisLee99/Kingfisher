@@ -11,9 +11,41 @@ block content
           form.form-inline(method="post", action="weather")
             .form-group
               label.sr-only(for="inputEmail") City Name
-              input.form-control( name="city" type="text" placeholder="Enter City Name" required='required')
+              input.form-control( name="city" type="text" placeholder="Enter a city Name" required='required')
               
             |    
-            button.btn.btn-primary(type="submit") Fetch Weather
+            button.btn.btn-primary(type="submit") Get Weather
           
         hr
+        .row
+        .col-md-12
+          p
+           br
+           br
+           strong Weather Forecast (5 days) #{forecast}
+          table.table
+            thead
+              tr
+                th Longitude / Latitude
+                
+                th Pressure
+                th Temprature
+                th Humidty
+                th Speed
+            tbody
+               if body
+                tr
+                  td
+                    #{body.coord.lon} / #{body.coord.lon}
+                  td 
+                    #{body.main.pressure}
+                  td
+                    #{body.main.temp}
+                  td
+                    #{body.main.humidity}
+                  td
+                    #{body.wind.speed}
+               else
+                tr
+                    td(colspan="6")
+                      | Enter a city name and click Get Weather button
