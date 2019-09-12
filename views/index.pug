@@ -1,0 +1,19 @@
+extends layout
+block content
+  .container
+      h2 
+        p
+         | Weather App in NodeJS using Open Weather API
+      br
+      br
+      .row
+        .col-md-6
+          form.form-inline(method="post", action="weather")
+            .form-group
+              label.sr-only(for="inputEmail") City Name
+              input.form-control( name="city" type="text" placeholder="Enter City Name" required='required')
+              
+            |    
+            button.btn.btn-primary(type="submit") Fetch Weather
+          
+        hr

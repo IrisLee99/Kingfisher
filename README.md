@@ -4,6 +4,9 @@ web dev test
 entry point: index.js
 open libs: node-modules: to use common modules such as "require" 
            yargs: command line interface tool
+           express: for frontend html generation
+           nodemon: for auto server restart
+           babel: 
 3rd party API: openweathermap.org      
 
 Usage:
