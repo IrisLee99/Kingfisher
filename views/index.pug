@@ -29,23 +29,23 @@ block content
                 th Longitude / Latitude
                 
                 th Pressure
-                th Temprature
+                th Temprature (metric)
                 th Humidty
                 th Speed
             tbody
                if body
                 tr
                   td
-                    #{body.coord.lon} / #{body.coord.lon}
+                    #{body.coord.lon} / #{body.coord.lat}
                   td 
-                    #{body.main.pressure}
+                     #{body.main.pressure} 
                   td
-                    #{body.main.temp}
+                     #{body.main.temp}
                   td
-                    #{body.main.humidity}
+                     #{body.main.humidity}
                   td
-                    #{body.wind.speed}
+                     #{body.wind.speed}
                else
                 tr
                     td(colspan="6")
-                      | Enter a city name and click Get Weather button
+                      | Enter a city name and click Get Weather button                  
