@@ -23,7 +23,8 @@ router.get('/', function(req, res, next) {
 router.post('/weather', function(req, res, next){
     console.log("POST");
     let city = req.body.city;
-    url = weather_url + city +"&"+ units + "&" + apiKey;   
+    url = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
+    //console.log(url);
 
     weather_request(url, function (err, response, body) {
         if(err){
@@ -31,7 +32,7 @@ router.post('/weather', function(req, res, next){
         } else {
         let weather = JSON.parse(body);
         let message = `Temperature today is ${weather.main.temp} degrees in
-                    ${weather.name}!`;
+                    ${weather.name}, ${weather.sys.country}!`;
         console.log(message);
         }
     });
