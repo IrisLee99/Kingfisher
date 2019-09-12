@@ -35,12 +35,12 @@ router.post('/weather', function(req, res, next){
             let message = `Temperature today is ${weather.main.temp} degrees in
                         ${weather.name}, ${country}!`;
                         
-            console.log(weather);
+            //console.log(weather);
             console.log(message);
 
             let comments = "For city "+city+', country '+country;
 
-            res.render('index', {body : weather, comments : comments});
+            res.render('index', {body : weather, message : message});
         }
     });
 
