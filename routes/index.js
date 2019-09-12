@@ -16,32 +16,46 @@ const forecast_request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log("GET");
+    console.log("**GET**");
     res.render('index', {'body':'', forecast: ''});
    });
 
 /* POST result page - weather now*/   
 router.post('/weather', function(req, res, next){
-    console.log("POST");
+    console.log("**POST**");
     let city = req.body.city;
     url = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
     //console.log(url);
 
+    console.log("**REQUEST1**");
     weather_request(url, function (err, response, body) {
         if(err){
-        console.log('error:', error);
+            console.log('error:', error);
         } else {
             let weather = JSON.parse(body);
-            let country = (weather.sys.country) ? weather.sys.country : '' ;
-            let message = ` is ${weather.main.temp} degrees in
-                        ${weather.name}, ${country}!`;
-                        
-            //console.log(weather);
-            console.log(message);
+            let comments = null;
 
-            let comments = "For city "+city+', country '+country;
+            //console.log(weather.coord);     //check if undefined
 
-            res.render('index', {body : weather, message : message});
+            if (weather.coord == undefined) {
+                console.log("**RETURN BODY EMPTY**");
+                comments = city + "can't be found.";
+
+                res.render('index', {'body':'', message: comments});
+
+            } else {
+                let country = (weather.sys.country) ? weather.sys.country : '' ;
+                let message = ` is ${weather.main.temp} degrees in
+                            ${weather.name}, ${country}!`;
+                            
+                console.log(weather);
+                console.log(message);
+
+                comments = "For city "+city+', country '+country;
+
+                res.render('index', {body : weather, message : message});
+            }
+
         }
     });
 
@@ -70,7 +84,7 @@ router.post('/weather', function(req, res, next){
 });
 
 /* POST result page - forecast*/  
-router.post('/forecast', function(req, res, next){
+router.post('/weather', function(req, res, next){
     let city = req.body.city;
     url = forecast_url + city + "&units=" + units + "&appid=" + apiKey;   
 
