@@ -1,15 +1,17 @@
 # Kingfisher
 web dev test
 
-entry point: index.js
+entry point: app.js
 open libs: node-modules: to use common modules such as "require" 
            yargs: command line interface tool
            express: for frontend html generation
            nodemon: for auto server restart
-           babel: 
+           babel: new syntax?
 3rd party API: openweathermap.org      
 
-Usage:
+Usage:node app.js
+
+
 #1. Get Weather by City Name
 node index.js -c {city}
 

@@ -8,9 +8,11 @@ var bodyParser = require('body-parser');
 var index = require('./index');
 //var users = require('./routes/users');
 
-var app = express();
+const app = express();
+const port = 3000;
 
 // view engine setup
+app.engine('pug', require('pug').__express);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -42,5 +44,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+//app.get('/', (req, res, next));
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 module.exports = app;
