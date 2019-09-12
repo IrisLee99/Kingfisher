@@ -3,9 +3,9 @@ const router = express.Router();
 
 const lib = require("../lib.js");
 const argv = require('yargs').argv;
-let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //to be hidden
+let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //To do: to be hidden
 let city = argv.c || 'Hangzhou';
-let country = 'China';                              //to be input
+let country = 'China';                              //To do: to be input - done
 let units = 'metric';
 let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
 //let weather_url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
@@ -39,9 +39,9 @@ router.post('/weather', function(req, res, next){
 
             if (weather.coord == undefined) {
                 console.log("**RETURN BODY EMPTY**");
-                comments = city + "can't be found.";
+                comments = "  " + city + "can't be found. Please input a valid city name";
 
-                res.render('index', {'body':'', message: comments});
+                res.render('index', {'body':'', message: comments});     //To do: warning message with red 
 
             } else {
                 let country = (weather.sys.country) ? weather.sys.country : '' ;

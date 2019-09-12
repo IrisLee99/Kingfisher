@@ -33,18 +33,18 @@ block content
                 th Humidty
                 th Speed
             tbody
-               if body
+               if weather
                 tr
                   td
-                    #{body.coord.lon} / #{body.coord.lat}
+                    #{weather.coord.lon} / #{body.coord.lat}
                   td 
-                     #{body.main.pressure} 
+                     #{weather.main.pressure} 
                   td
-                     #{body.main.temp}
+                     #{weather.main.temp}
                   td
-                     #{body.main.humidity}
+                     #{weather.main.humidity}
                   td
-                     #{body.wind.speed}
+                     #{weather.wind.speed}
                else
                 tr
                     td(colspan="6")
