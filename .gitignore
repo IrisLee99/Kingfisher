@@ -1,0 +1,5 @@
+# node libs
+node_modules/
+
+# OS cache files
+.DS_Store/

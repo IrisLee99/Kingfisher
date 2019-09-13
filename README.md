@@ -7,9 +7,12 @@ open libs: node-modules: to use common modules such as "require"
            express: for frontend html generation
            nodemon: for auto server restart
            babel: new syntax?
+           pug: for html file generation
+           bluebird: for multiple requests
+
 3rd party API: openweathermap.org      
 
-Usage:node app.js
+Usage:npm start 
 
 
 #1. Get Weather by City Name

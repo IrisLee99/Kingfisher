@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Weather App in NodeJS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2> 
+        <p>Global Weather </p>
+      </h2><br><br>
+      <div class="row">
+        <div class="col-md-6">
+          <form class="form-inline" method="post" action="weather">
+            <div class="form-group">
+              <label class="sr-only" for="inputEmail">City Name</label>
+              <input class="form-control" name="city" type="text" placeholder="Enter a city name" required="required">
+            </div>   
+            <button class="btn btn-primary" type="submit">Get Weather</button>
+          </form>
+        </div>
+        <hr>
+        <div class="row"></div>
+        <div class="col-md-12">
+          <p><br><br><strong>Weather Today </strong></p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Longitude / Latitude</th>
+                <th>Pressure</th>
+                <th>Temprature (metric)</th>
+                <th>Humidty</th>
+                <th>Speed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6">Enter a city name and click Get Weather button                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
