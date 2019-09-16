@@ -3,7 +3,8 @@ var Promise = require("bluebird");
 const router = express.Router();
 const lib = require("../lib.js");
 const argv = require('yargs').argv;
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
+
 
 let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
@@ -21,7 +22,8 @@ var urlList = ["", ""];
 const schema = Joi.object().keys({
 
     // city name must be a valid name string   
-    name: Joi.string().name().string.pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35
+    name: Joi.string()
+    .pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35
 
     // lon is required as a number
     lon: Joi.number().required(),
@@ -64,7 +66,7 @@ router.post('/weather', function(req, res, next){
 
                 //validation on the response here
                 // validate the request data against the schema
-                Joi.validate(data, schema, (err, value) => {
+                /*Joi.validate(data, schema, (err, value) => {
 
                     if (err) {
                         console.log("**schema validation failed**");
@@ -73,7 +75,7 @@ router.post('/weather', function(req, res, next){
                         return JSON.parse(body);
                     }
 
-                });
+                });*/
             }
     }).then(function(results) {
 
@@ -110,12 +112,12 @@ router.post('/weather', function(req, res, next){
         //res.render('index', {body : weather, message : message});
         //res.render('index', {body : forecast, comments : comments});
 
-    }).catch(function(err) {
-        // handle error here
-        console.log('error:', err);
+        }).catch(function(err) {
+            // handle error here
+            console.log('error:', err);
+        });
+        
     });
-
-
 
     function getWeatherToday(weather) {
         

@@ -4,6 +4,7 @@
   "description": "interview test",
   "main": "index.js",
   "dependencies": {
+    "@hapi/joi": "^16.0.1",
     "bluebird": "^3.5.5",
     "express": "^4.17.1",
     "jade": "^1.11.0",
