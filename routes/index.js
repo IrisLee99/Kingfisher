@@ -18,6 +18,7 @@ let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 //const forecast_request = require('request');
 var request = Promise.promisifyAll(require("request"), {multiArgs: true});
 var urlList = ["", ""];
+var datetime = new Date();
 
 const schema = Joi.object().keys({
 
@@ -36,7 +37,7 @@ const schema = Joi.object().keys({
 
     // date is not required
     // date must be a valid ISO-8601 date
-    date: Joi.date().min('1-1-2019').iso(),    //TODO: put sysdate
+    date: Joi.date().min(datetime.date).iso(),    //TODO: put sysdate  - done
 
 });
 
@@ -44,6 +45,7 @@ const schema = Joi.object().keys({
 router.get('/', function(req, res, next) {
     console.log("**GET**");
     res.render('index', {'body':'', forecast: ''});
+    console.log("date:" + datetime.date);
    });
 
 
@@ -61,13 +63,12 @@ router.post('/weather', function(req, res, next){
             if(response.statusCode != 200){
                 throw new Error('error1:', response.statusCode);
             }else {
-
                 console.log("**respond**");
-
+                //const result = Joi.validate(response, schema);
                 //validation on the response here
                 // validate the request data against the schema
-                /*Joi.validate(data, schema, (err, value) => {
-
+                schema.validate({}, (err, value) => {
+                    console.log("**in schema validation**");
                     if (err) {
                         console.log("**schema validation failed**");
                     } else {
@@ -75,40 +76,45 @@ router.post('/weather', function(req, res, next){
                         return JSON.parse(body);
                     }
 
-                });*/
+                });
             }
     }).then(function(results) {
 
-        let weather = results[0];
-        let forecast = results[1];
+        if (results === undefined) {
+            console.log("results is undefined");
+        }else {
+            let weather = results[0];
+            let forecast = results[1];
+        
 
-        if (weather.coord == undefined) {
-            console.log("**RETURN WEATHER BODY EMPTY**");
-            comments = "  " + city + "can't be found. Please input a valid city name";
+            if (weather.coord == undefined) {
+                console.log("**RETURN WEATHER BODY EMPTY**");
+                comments = "  " + city + "can't be found. Please input a valid city name";
 
-            res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                res.render('index', {'body':'', message: comments});     //To do: warning message with red 
 
-            return;
+                return;
 
-        } else {
-            console.log("got weather");
-            let msg = getWeatherToday(weather);
-            res.render('index', {body : weather, message : msg});
+            } else {
+                console.log("got weather");
+                let msg = getWeatherToday(weather);
+                res.render('index', {body : weather, message : msg});
+            }
+
+            if (forecast.list == undefined) {
+                console.log("**RETURN FORECAST BODY EMPTY**");
+                comments = " forecast " + city + "can't be found. Please check if API is working";
+
+                res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                
+            } else {
+                console.log("got forecast");
+                let msg = get5DayForecast(forecast);
+                
+                res.render('index', {body : forecast, message : msg});
+            }
+
         }
-
-        if (forecast.list == undefined) {
-            console.log("**RETURN FORECAST BODY EMPTY**");
-            comments = " forecast " + city + "can't be found. Please check if API is working";
-
-            res.render('index', {'body':'', message: comments});     //To do: warning message with red 
-            
-        } else {
-            console.log("got forecast");
-            let msg = get5DayForecast(forecast);
-            
-            res.render('index', {body : forecast, message : msg});
-        }
-
         //res.render('index', {body : weather, message : message});
         //res.render('index', {body : forecast, comments : comments});
 
