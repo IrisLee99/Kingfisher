@@ -1,12 +1,13 @@
 var express = require('express');
 var Promise = require("bluebird");
 const router = express.Router();
-
 const lib = require("../lib.js");
 const argv = require('yargs').argv;
-let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //To do: to be hidden
+const Joi = require('joi');
+
+let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
-let country = 'China';                              //To do: to be input - done
+let country = 'China';                              //TODO: to be input - done
 let units = 'metric';
 let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
 //let weather_url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
@@ -17,6 +18,25 @@ let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 var request = Promise.promisifyAll(require("request"), {multiArgs: true});
 var urlList = ["", ""];
 
+const schema = Joi.object().keys({
+
+    // city name must be a valid name string   
+    name: Joi.string().name().string.pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35
+
+    // lon is required as a number
+    lon: Joi.number().required(),
+
+    // la is required as a number
+    lat: Joi.number().required(),
+
+    //temperature is required
+    temp: Joi.number().required,
+
+    // date is not required
+    // date must be a valid ISO-8601 date
+    date: Joi.date().min('1-1-2019').iso(),    //TODO: put sysdate
+
+});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -41,12 +61,20 @@ router.post('/weather', function(req, res, next){
             }else {
 
                 console.log("**respond**");
-                console.log(response);
-                return JSON.parse(body);
 
+                //validation on the response here
+                // validate the request data against the schema
+                Joi.validate(data, schema, (err, value) => {
+
+                    if (err) {
+                        console.log("**schema validation failed**");
+                    } else {
+                        console.log("**schema passed**");
+                        return JSON.parse(body);
+                    }
+
+                });
             }
-
-        });
     }).then(function(results) {
 
         let weather = results[0];
