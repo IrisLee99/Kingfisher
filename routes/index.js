@@ -41,7 +41,7 @@ router.post('/weather', function(req, res, next){
             }else {
 
                 console.log("**respond**");
-                console.log(body);
+                console.log(response);
                 return JSON.parse(body);
 
             }

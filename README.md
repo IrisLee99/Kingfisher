@@ -9,7 +9,8 @@ open libs: node-modules: to use common modules such as "require"
            babel: new syntax?
            pug: for html file generation
            bluebird: for multiple requests
-
+           joi: for schema validation
+           
 3rd party API: openweathermap.org      
 
 Usage:npm start 
