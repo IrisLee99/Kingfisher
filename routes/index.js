@@ -23,22 +23,8 @@ var datetime = new Date();
 const schema = Joi.object().keys({
 
     // city name must be a valid name string   
-    name: Joi.string()
+    city: Joi.string()
     .pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35
-
-    // lon is required as a number
-    lon: Joi.number().required(),
-
-    // la is required as a number
-    lat: Joi.number().required(),
-
-    //temperature is required
-    temp: Joi.number().required,
-
-    // date is not required
-    // date must be a valid ISO-8601 date
-    date: Joi.date().min(datetime.date).iso(),    //TODO: put sysdate  - done
-
 });
 
 /* GET home page. */
@@ -59,69 +45,69 @@ router.post('/weather', function(req, res, next){
 
     Promise.map(urlList, function(url) {
 
-        return request.getAsync(url).spread(function(response,body) {
-            if(response.statusCode != 200){
-                throw new Error('error1:', response.statusCode);
-            }else {
-                console.log("**respond**");
-                //const result = Joi.validate(response, schema);
-                //validation on the response here
-                // validate the request data against the schema
-                schema.validate({}, (err, value) => {
-                    console.log("**in schema validation**");
-                    if (err) {
-                        console.log("**schema validation failed**");
-                    } else {
-                        console.log("**schema passed**");
-                        return JSON.parse(body);
-                    }
-
-                });
-            }
-    }).then(function(results) {
-
-        if (results === undefined) {
-            console.log("results is undefined");
-        }else {
-            let weather = results[0];
-            let forecast = results[1];
         
+        //simple city input valiation
+        const {error} = schema.validate({ city: city});
 
-            if (weather.coord == undefined) {
-                console.log("**RETURN WEATHER BODY EMPTY**");
-                comments = "  " + city + "can't be found. Please input a valid city name";
+        if (error) {
+            //console.log(error.message);
+            next(error);
+          } else {
 
-                res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+            return request.getAsync(url).spread(function(response,body) {
+                if(response.statusCode != 200){
+                    throw new Error('error1:', response.statusCode);
+                }else {
+                    console.log("**respond**");
+                    //console.log("body:" +  body);
+                    return JSON.parse(body);
+                }
+            }).then(function(results) {
+
+                if (results == undefined) {
+                    console.log("results is undefined");
+                }else {
+                    let weather = results.length;
+                    console.log("body1: " + weather);
+                    let forecast = results[1];
+                    console.log("body2: " + forecast);
+        
+                if (weather.coord == undefined) {
+                    console.log("**RETURN WEATHER BODY EMPTY**");
+                    comments = "  " + city + "can't be found. Please input a valid city name";
+
+                    res.render('index', {'body':'', message: comments});     //To do: warning message with red 
 
                 return;
 
-            } else {
-                console.log("got weather");
-                let msg = getWeatherToday(weather);
-                res.render('index', {body : weather, message : msg});
-            }
+                } else {
+                    console.log("got weather");
+                    let msg = getWeatherToday(weather);
+                    res.render('index', {body : weather, message : msg});
+                }
 
-            if (forecast.list == undefined) {
-                console.log("**RETURN FORECAST BODY EMPTY**");
-                comments = " forecast " + city + "can't be found. Please check if API is working";
+                if (forecast.list == undefined) {
+                    console.log("**RETURN FORECAST BODY EMPTY**");
+                    comments = " forecast " + city + "can't be found. Please check if API is working";
 
-                res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                    res.render('index', {'body':'', message: comments});     //To do: warning message with red 
                 
-            } else {
-                console.log("got forecast");
-                let msg = get5DayForecast(forecast);
+                } else {
+                    console.log("got forecast");
+                    let msg = get5DayForecast(forecast);
                 
-                res.render('index', {body : forecast, message : msg});
-            }
+                    res.render('index', {body : forecast, message : msg});
+                }
 
+            }
+            //res.render('index', {body : weather, message : message});
+            //res.render('index', {body : forecast, comments : comments});
+
+            }).catch(function(err) {
+                // handle error here
+                console.log('error:', err);
+            });
         }
-        //res.render('index', {body : weather, message : message});
-        //res.render('index', {body : forecast, comments : comments});
-
-        }).catch(function(err) {
-            // handle error here
-            console.log('error:', err);
-        });
         
     });
 
