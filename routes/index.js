@@ -71,7 +71,6 @@ router.post('/weather', function(req, res, next){
                     console.log("results is undefined");
                 }else {
                     weather = results[0];
-                    console.log("weather :" + weather);
                     forecast = results[1];                
 
                     if (weather.coord == undefined) {
@@ -83,26 +82,25 @@ router.post('/weather', function(req, res, next){
                     return;
 
                     } else {
-                        console.log("got weather");
                         let comments = getWeatherToday(weather);
                         res.render('index', {body : weather, message : comments});
                     }
 
-                /*if (forecast.list == undefined) {
+            
+                if (forecast.list == undefined) {
                     console.log("**RETURN FORECAST BODY EMPTY**");
                     comments = " forecast " + city + "can't be found. Please check if API is working";
 
                     res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                    
+                    return;
                 
                 } else {
-                    let forecast = payload;
-                    console.log("got forecast");
+                    
                     let comments = get5DayForecast(forecast);
-                
                     //res.render('index', {body : forecast, message : comments});
                 }
 
-                res.render('index', {body : forecast, message : comments});*/
             }
             //res.render('index', {body : weather, message : message});
             //res.render('index', {body : forecast, comments : comments});
@@ -137,11 +135,12 @@ router.post('/weather', function(req, res, next){
     function get5DayForecast (forecast) {
 
             var i;
+            //let message[forecast.list.length];
             for (i = 0; i < forecast.list.length; i++) { 
                 let date = lib.DateFormatter(forecast.list[i].dt);
-                let message = `Forecast in 5 day is ${forecast.list[i].main.temp} degrees in
+                let msg = `Forecast in 5 day is ${forecast.list[i].main.temp} degrees in
                         ${forecast.city.name} at ${date}, ${forecast.city.country}!`;
-                console.log(message);
+                console.log(msg);
             }
 
             let message = "For city "+city+', country '+country;
