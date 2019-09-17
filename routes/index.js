@@ -151,3 +151,9 @@ router.post('/weather', function(req, res, next){
 
 
 module.exports = router;
+
+
+//TODO: handle wrong city names: aaa
+//TODO: move some functions outside of index.js
+//TODO: test with ???
+//TODO: packaging?
