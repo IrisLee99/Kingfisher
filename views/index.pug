@@ -63,17 +63,18 @@ block content
                 th Time
             tbody
                if forecast
+               each val in forecast.list
                 tr
                   td
                     #{forecast.city.coord.lon} /#{forecast.city.coord.lat}
                   td
-                     #{forecast.list[0].main.temp_min}
+                     #{val.main.temp_min}
                   td
-                     #{forecast.list[0].main.temp_max}
+                     #{val.main.temp_max}
                   td
-                     #{forecast.list[0].main.humidity}
+                     #{val.main.humidity}
                   td
-                     #{forecast.list[0].wind.speed}
+                     #{val.wind.speed}
                   td 
-                     #{forecast.list[0].dt_txt}   
+                     #{val.dt_txt}   
                                            
