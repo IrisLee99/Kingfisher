@@ -43,16 +43,16 @@ router.post('/weather', function(req, res, next){
     url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
     var urlList = [url1, url2];
 
-    Promise.map(urlList, function(url) {
+    Promise.map(urlList, url => {
 
-        
-        //simple city input valiation
-        const {error} = schema.validate({ city: city});
+        const {error} = schema.validate({ city: city});        //simple city input valiation
 
         if (error) {
-            //console.log(error.message);
             next(error);
           } else {
+
+            let weather = null;
+            let forecast = null;
 
             return request.getAsync(url).spread(function(response,body) {
                 if(response.statusCode != 200){
@@ -62,43 +62,47 @@ router.post('/weather', function(req, res, next){
                     //console.log("body:" +  body);
                     return JSON.parse(body);
                 }
-            }).then(function(results) {
+            });
+        }
+            
+        }).then(function(results) {
 
                 if (results == undefined) {
                     console.log("results is undefined");
                 }else {
-                    let weather = results.length;
-                    console.log("body1: " + weather);
-                    let forecast = results[1];
-                    console.log("body2: " + forecast);
-        
-                if (weather.coord == undefined) {
-                    console.log("**RETURN WEATHER BODY EMPTY**");
-                    comments = "  " + city + "can't be found. Please input a valid city name";
+                    weather = results[0];
+                    console.log("weather :" + weather);
+                    forecast = results[1];                
 
-                    res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                    if (weather.coord == undefined) {
+                        console.log("**RETURN WEATHER BODY EMPTY**");
+                        comments = "  " + city + "can't be found. Please input a valid city name";
 
-                return;
+                        res.render('index', {'body':'', message: comments});     //To do: warning message with red 
 
-                } else {
-                    console.log("got weather");
-                    let msg = getWeatherToday(weather);
-                    res.render('index', {body : weather, message : msg});
-                }
+                    return;
 
-                if (forecast.list == undefined) {
+                    } else {
+                        console.log("got weather");
+                        let comments = getWeatherToday(weather);
+                        res.render('index', {body : weather, message : comments});
+                    }
+
+                /*if (forecast.list == undefined) {
                     console.log("**RETURN FORECAST BODY EMPTY**");
                     comments = " forecast " + city + "can't be found. Please check if API is working";
 
                     res.render('index', {'body':'', message: comments});     //To do: warning message with red 
                 
                 } else {
+                    let forecast = payload;
                     console.log("got forecast");
-                    let msg = get5DayForecast(forecast);
+                    let comments = get5DayForecast(forecast);
                 
-                    res.render('index', {body : forecast, message : msg});
+                    //res.render('index', {body : forecast, message : comments});
                 }
 
+                res.render('index', {body : forecast, message : comments});*/
             }
             //res.render('index', {body : weather, message : message});
             //res.render('index', {body : forecast, comments : comments});
@@ -107,7 +111,7 @@ router.post('/weather', function(req, res, next){
                 // handle error here
                 console.log('error:', err);
             });
-        }
+        
         
     });
 
@@ -147,6 +151,6 @@ router.post('/weather', function(req, res, next){
         }
     
 
-});
+
 
 module.exports = router;
