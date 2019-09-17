@@ -31,7 +31,7 @@ const schema = Joi.object().keys({
 router.get('/', function(req, res, next) {
     console.log("**GET**");
     res.render('index', {'body':'', forecast: ''});
-    console.log("date:" + datetime.date);
+    console.log("date:" + datetime);
    });
 
 
@@ -98,7 +98,7 @@ router.post('/weather', function(req, res, next){
                 } else {
                     
                     let comments = get5DayForecast(forecast);
-                    //res.render('index', {body : forecast, message : comments});
+                    res.render('index', {body : forecast, message : comments});
                 }
 
             }
@@ -135,15 +135,14 @@ router.post('/weather', function(req, res, next){
     function get5DayForecast (forecast) {
 
             var i;
-            //let message[forecast.list.length];
+            let msg = 'Forecast in 5 day is';
             for (i = 0; i < forecast.list.length; i++) { 
                 let date = lib.DateFormatter(forecast.list[i].dt);
-                let msg = `Forecast in 5 day is ${forecast.list[i].main.temp} degrees in
-                        ${forecast.city.name} at ${date}, ${forecast.city.country}!`;
-                console.log(msg);
+                msg = msg +  `${forecast.list[i].main.temp} degrees in ${forecast.city.name} at ${date}, ${forecast.city.country}!`;               
             }
+            console.log(msg);
 
-            let message = "For city "+city+', country '+country;
+            let message = msg + " /n For city "+city+', country '+country;
     
             //res.render('index', {body : forecast, message : message});
             return message;

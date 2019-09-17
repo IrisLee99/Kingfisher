@@ -48,4 +48,32 @@ block content
                else
                 tr
                     td(colspan="6")
-                      | Enter a city name and click Get Weather button                  
+                      | Enter a city name and click Get Weather button 
+          
+          strong Forecast in 5 Days#{message}
+          table.table
+            thead
+              tr
+                th Longitude / Latitude
+
+                th Temprature Min (metric)
+                th Temprature Max (metric)
+                th Humidty
+                th Speed
+                th Time
+            tbody
+               if forecast
+                tr
+                  td
+                    #{forecast.city.coord.lon} /#{forecast.city.coord.lat}
+                  td
+                     #{forecast.list[0].main.temp_min}
+                  td
+                     #{forecast.list[0].main.temp_max}
+                  td
+                     #{forecast.list[0].main.humidity}
+                  td
+                     #{forecast.list[0].wind.speed}
+                  td 
+                     #{forecast.list[0].dt_txt}   
+                                           
