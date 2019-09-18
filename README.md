@@ -13,7 +13,9 @@ open libs: node-modules: to use common modules such as "require"
            
 3rd party API: openweathermap.org      
 
-Usage:npm start 
+Usage:  1. npm start 
+        2. browse to http://localhost:3000/
+        3. Input any city names and click 
 
 
 #1. Get Weather by City Name
