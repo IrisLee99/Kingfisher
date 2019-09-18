@@ -28,10 +28,14 @@ const schema = Joi.object().keys({
 });
 
 /* GET home page. */
+//router.get('/', (req, res) => res.send('Hello World!'))
+
 router.get('/', function(req, res, next) {
     console.log("**GET**");
     res.render('index', {'body':'', forecast: ''});
     console.log("date:" + datetime);
+    //TODO: wait 10sec for server response
+    //res.end();
    });
 
 
