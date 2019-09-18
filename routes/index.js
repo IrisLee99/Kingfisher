@@ -121,7 +121,6 @@ router.post('/weather', function(req, res, next){
             let message = ` is ${weather.main.temp} degrees in
                             ${weather.name}, ${country}!`;
                             
-            console.log(weather);
             console.log(message);
 
             comments = "For city "+city+', country '+country;
@@ -135,14 +134,14 @@ router.post('/weather', function(req, res, next){
     function get5DayForecast (forecast) {
 
             var i;
-            let msg = 'Forecast in 5 day is';
+            //let msg = 'Forecast in 5 days: ';
             for (i = 0; i < forecast.list.length; i++) { 
                 let date = lib.DateFormatter(forecast.list[i].dt);
-                msg = msg +  `${forecast.list[i].main.temp} degrees in ${forecast.city.name} at ${date}, ${forecast.city.country}!`;               
+                //msg = msg +  `${forecast.list[i].main.temp} degrees in ${forecast.city.name} at ${date}, ${forecast.city.country}!`;               
             }
-            console.log(msg);
+            //console.log(msg);
 
-            let message = msg + " /n For city "+city+', country '+country;
+            let message =   "  for city "+city+', country '+country;
     
             //res.render('index', {body : forecast, message : message});
             return message;
@@ -152,3 +151,9 @@ router.post('/weather', function(req, res, next){
 
 
 module.exports = router;
+
+
+//TODO: handle wrong city names: aaa
+//TODO: move some functions outside of index.js
+//TODO: test with ???
+//TODO: packaging?
