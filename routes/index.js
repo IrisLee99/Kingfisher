@@ -77,7 +77,7 @@ router.post('/weather', function(req, res, next){
                     weather = results[0];
                     forecast = results[1];                
 
-                    if (weather.coord == undefined) {
+                    if (weather == undefined || weather.coord == undefined) {
                         console.log("**RETURN WEATHER BODY EMPTY**");
                         comments = "  " + city + "can't be found. Please input a valid city name";
 
@@ -122,8 +122,7 @@ router.post('/weather', function(req, res, next){
             let comments = null;
             //console.log(weather.coord);     //check if undefined
             let country = (weather.sys.country) ? weather.sys.country : '' ;
-            let message = ` is ${weather.main.temp} degrees in
-                            ${weather.name}, ${country}!`;
+            let message = ` is ${weather.main.temp} degrees in ${weather.name}, ${country}!`;
                             
             console.log(message);
 
