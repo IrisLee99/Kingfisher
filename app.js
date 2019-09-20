@@ -1,3 +1,5 @@
+import { getWeatherToday, get5DayForecast } from './controllers/weatherController.js';
+
 var express = require('express');
 var path = require('path');
 //var favicon = require('serve-favicon');
@@ -45,6 +47,8 @@ app.use(function(err, req, res, next) {
 });
 
 //app.get('/', (req, res, next));
+//app.get('/weather/:city', getWeatherToday)
+//app.get('/forecast/:city', get5DayForecast)
 
 app.listen(port, () => console.log(`Weather sample app listening on port ${port}!`));
 

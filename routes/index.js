@@ -1,6 +1,4 @@
-const controller = require('../controllers/weatherController.js');
-let {getWeatherToday, get5DayForecast} = controller;
-//import { getWeatherToday, get5DayForecast } from '../controllers/weatherController.js';
+import { getWeatherToday, get5DayForecast } from '../controllers/weatherController.js';
 
 var express = require('express');
 var Promise = require("bluebird");
@@ -24,7 +22,7 @@ const schema = Joi.object().keys({
 
     // city name must be a valid name string   
     city: Joi.string()
-    .pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35
+    .pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35 - done
 });
 
 /* GET home page. */
@@ -33,8 +31,7 @@ const schema = Joi.object().keys({
 router.get('/', function(req, res, next) {
     console.log("**GET**");
     res.render('index', {'body':'', forecast: ''});
-    console.log("date:" + datetime);
-    //TODO: wait 10sec for server response
+    console.log("date:" + datetime);           //TODO: wait 10sec for server response
     //res.end();
    });
 
@@ -42,13 +39,16 @@ router.get('/', function(req, res, next) {
 /* POST result page - weather now*/   
 router.post('/weather', function(req, res, next){
     console.log("**POST**");
+
     let city = req.body.city;
-    url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
-    url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
+    console.log("city: " + city);
+
+    let url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
+    let url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
+
     var urlList = [url1, url2];
 
     Promise.map(urlList, url => {
-
         const {error} = schema.validate({ city: city});        //simple city input valiation
 
         if (error) {
@@ -74,8 +74,8 @@ router.post('/weather', function(req, res, next){
                 if (results == undefined) {
                     console.log("results is undefined");
                 }else {
-                    weather = results[0];
-                    forecast = results[1];                
+                    let weather = results[0];
+                    let forecast = results[1];                
 
                     if (weather == undefined || weather.coord == undefined) {
                         console.log("**RETURN WEATHER BODY EMPTY**");
@@ -86,7 +86,7 @@ router.post('/weather', function(req, res, next){
                     return;
 
                     } else {
-                        let comments = controller.getWeatherToday(weather);
+                        let comments = getWeatherToday;
                         res.render('index', {body : weather, message : comments});
                     }
 
@@ -101,13 +101,11 @@ router.post('/weather', function(req, res, next){
                 
                 } else {
                     
-                    let comments = controller.get5DayForecast(forecast);
+                    let comments = get5DayForecast;
                     res.render('index', {body : forecast, message : comments});
                 }
 
             }
-            //res.render('index', {body : weather, message : message});
-            //res.render('index', {body : forecast, comments : comments});
 
             }).catch(function(err) {
                 // handle error here
