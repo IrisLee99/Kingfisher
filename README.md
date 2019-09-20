@@ -10,6 +10,7 @@ open libs: node-modules: to use common modules such as "require"
            pug: for html file generation
            bluebird: for multiple requests
            joi: for schema validation
+           mocha: testing framework   ref: https://mochajs.org/
            
 3rd party API: openweathermap.org      
 
