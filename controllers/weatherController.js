@@ -26,7 +26,7 @@ const schema = Joi.object().keys({
 const getBoth = function(req, res, next){
 
     console.log("**POST BOTH**");
-    let city = req.body.city;
+    const city = req.body.city;
     console.log("city: " + city);
 
     let url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
@@ -68,7 +68,7 @@ const getBoth = function(req, res, next){
                         console.log("**RETURN WEATHER BODY EMPTY**");
                         comments = "  " + city + "can't be found. Please input a valid city name";
 
-                        res.render('.index', {'body':'', message: comments});     //To do: warning message with red 
+                        res.render('.index', {body:'', message: comments});     //To do: warning message with red 
 
                     return;
 
@@ -82,12 +82,11 @@ const getBoth = function(req, res, next){
                     console.log("**RETURN FORECAST BODY EMPTY**");
                     comments = " forecast " + city + "can't be found. Please check if API is working";
 
-                    res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                    res.render('index', {body:'', message: comments});     //To do: warning message with red 
                     
                     return;
                 
                 } else {
-                    
                     let comments = get5DayForecast(forecast);
                     res.render('index', {body : forecast, message : comments});
                 }
@@ -128,4 +127,4 @@ function get5DayForecast (forecast) {
         return message;
 }
 
-export {getBoth};
+export {getBoth, city};

@@ -1,4 +1,4 @@
-import { getBoth } from '../controllers/weatherController.js';
+import { getBoth, city } from '../controllers/weatherController.js';
 
 var express = require('express');
 var Promise = require("bluebird");
@@ -19,9 +19,10 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-router.post('/weather' ,getBoth );
+router.post('/weather'  ,getBoth );
 
 //TODO: handle wrong city names: aaa   
-//TODO: move some functions outside of index.js
-//TODO: test with ???
-//TODO: packaging?
+//TODO: move some functions outside of index.js - done
+//TODO: test with: mocha + chai
+//TODO: packaging?  - skip
+//TODO: put param city in URL 
