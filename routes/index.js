@@ -1,9 +1,8 @@
-import { getBoth, getWeatherToday, get5DayForecast } from '../controllers/weatherController.js';
+import { getBoth } from '../controllers/weatherController.js';
 
 var express = require('express');
 var Promise = require("bluebird");
 const router = express.Router();
-const lib = require("../lib.js");
 
 var datetime = new Date();
 
@@ -22,7 +21,7 @@ module.exports = router;
 
 router.post('/weather' ,getBoth );
 
-//TODO: handle wrong city names: aaa
+//TODO: handle wrong city names: aaa   
 //TODO: move some functions outside of index.js
 //TODO: test with ???
 //TODO: packaging?

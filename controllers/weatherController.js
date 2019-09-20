@@ -1,4 +1,5 @@
 const Joi = require('@hapi/joi');
+const lib = require("../lib.js");
 const argv = require('yargs').argv;
 var express = require('express');
 var Promise = require("bluebird");
@@ -21,7 +22,7 @@ const schema = Joi.object().keys({
     .pattern(/^[a-zA-Z]{3,35}/).required(),    // TODO: simple validation here: a to z, length 3 to 35 - done
 });
 
-/* POST result page - weather now*/   
+/* POST result page - weather and forecast*/   
 const getBoth = function(req, res, next){
 
     console.log("**POST BOTH**");
@@ -45,7 +46,8 @@ const getBoth = function(req, res, next){
 
             return request.getAsync(url).spread(function(response,body) {
                 if(response.statusCode != 200){
-                    throw new Error('error1:', response.statusCode);
+                    next;
+                    //throw new Error('error1:', response.statusCode);
                 }else {
                     console.log("**respond**");
                     //console.log("body:" +  body);
@@ -66,12 +68,12 @@ const getBoth = function(req, res, next){
                         console.log("**RETURN WEATHER BODY EMPTY**");
                         comments = "  " + city + "can't be found. Please input a valid city name";
 
-                        res.render('index', {'body':'', message: comments});     //To do: warning message with red 
+                        res.render('.index', {'body':'', message: comments});     //To do: warning message with red 
 
                     return;
 
                     } else {
-                        let comments = getWeatherToday;
+                        let comments = getWeatherToday(weather);
                         res.render('index', {body : weather, message : comments});
                     }
 
@@ -86,7 +88,7 @@ const getBoth = function(req, res, next){
                 
                 } else {
                     
-                    let comments = get5DayForecast;
+                    let comments = get5DayForecast(forecast);
                     res.render('index', {body : forecast, message : comments});
                 }
 
@@ -97,9 +99,8 @@ const getBoth = function(req, res, next){
                 console.log('error:', err);
             });
         }
-
-const getWeatherToday = function(req, res, next) {
         
+function  getWeatherToday (weather) {
     let comments = null;
     //console.log(weather.coord);     //check if undefined
     let country = (weather.sys.country) ? weather.sys.country : '' ;
@@ -108,11 +109,13 @@ const getWeatherToday = function(req, res, next) {
     console.log(message);
 
     comments = "For city "+city+', country '+country;
+
+    //return message;
+    return comments;
 }
 
 
-const get5DayForecast = function (req, res, next) {
-
+function get5DayForecast (forecast) {
     var i;
     //let msg = 'Forecast in 5 days: ';
     for (i = 0; i < forecast.list.length; i++) { 
@@ -121,6 +124,7 @@ const get5DayForecast = function (req, res, next) {
     }
         let message =   "  for city "+city+', country '+country;
 
+        return message;
 }
 
-export { getWeatherToday, get5DayForecast, getBoth};
+export {getBoth};
