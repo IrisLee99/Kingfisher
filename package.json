@@ -4,6 +4,7 @@
   "description": "interview test",
   "main": "index.js",
   "dependencies": {
+    "@babel/polyfill": "^7.6.0",
     "@hapi/joi": "^16.0.1",
     "bluebird": "^3.5.5",
     "express": "^4.17.1",
@@ -16,12 +17,14 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
     "@babel/core": "^7.6.0",
-    "@babel/node": "^7.6.1"
+    "@babel/node": "^7.6.1",
+    "@babel/preset-env": "^7.6.0"
   },
   "scripts": {
-    "test": "echo \\\"Error: no test specified\\\" && exit 1",
-    "start": "npx nodemon app.js"
+    "test": "mocha",
+    "start": "nodemon --exec babel-node --inspect app.js"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@ open libs: node-modules: to use common modules such as "require"
            yargs: command line interface tool
            express: for frontend html generation
            nodemon: for auto server restart
-           babel: new syntax?
+           babel: new syntax?? a JavaScript compiler!
            pug: for html file generation
            bluebird: for multiple requests
            joi: for schema validation

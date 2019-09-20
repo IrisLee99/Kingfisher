@@ -1,3 +1,7 @@
+const controller = require('../controllers/weatherController.js');
+let {getWeatherToday, get5DayForecast} = controller;
+//import { getWeatherToday, get5DayForecast } from '../controllers/weatherController.js';
+
 var express = require('express');
 var Promise = require("bluebird");
 const router = express.Router();
@@ -5,17 +9,13 @@ const lib = require("../lib.js");
 const argv = require('yargs').argv;
 const Joi = require('@hapi/joi');
 
-
 let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
 let country = 'China';                              //TODO: to be input - done
 let units = 'metric';
 let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
-//let weather_url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
 let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
-//let forecast_url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${units}&appid=${apiKey}`;
-//const weather_request = require('request');
-//const forecast_request = require('request');
+
 var request = Promise.promisifyAll(require("request"), {multiArgs: true});
 var urlList = ["", ""];
 var datetime = new Date();
@@ -86,7 +86,7 @@ router.post('/weather', function(req, res, next){
                     return;
 
                     } else {
-                        let comments = getWeatherToday(weather);
+                        let comments = controller.getWeatherToday(weather);
                         res.render('index', {body : weather, message : comments});
                     }
 
@@ -101,7 +101,7 @@ router.post('/weather', function(req, res, next){
                 
                 } else {
                     
-                    let comments = get5DayForecast(forecast);
+                    let comments = controller.get5DayForecast(forecast);
                     res.render('index', {body : forecast, message : comments});
                 }
 
@@ -116,42 +116,6 @@ router.post('/weather', function(req, res, next){
         
         
     });
-
-    function getWeatherToday(weather) {
-        
-            let comments = null;
-            //console.log(weather.coord);     //check if undefined
-            let country = (weather.sys.country) ? weather.sys.country : '' ;
-            let message = ` is ${weather.main.temp} degrees in ${weather.name}, ${country}!`;
-                            
-            console.log(message);
-
-            comments = "For city "+city+', country '+country;
-
-            //res.render('index', {body : weather, message : message});
-            return message;
-
-        }
-    
-
-    function get5DayForecast (forecast) {
-
-            var i;
-            //let msg = 'Forecast in 5 days: ';
-            for (i = 0; i < forecast.list.length; i++) { 
-                let date = lib.DateFormatter(forecast.list[i].dt);
-                //msg = msg +  `${forecast.list[i].main.temp} degrees in ${forecast.city.name} at ${date}, ${forecast.city.country}!`;               
-            }
-            //console.log(msg);
-
-            let message =   "  for city "+city+', country '+country;
-    
-            //res.render('index', {body : forecast, message : message});
-            return message;
-        }
-    
-
-
 
 module.exports = router;
 
