@@ -20,8 +20,8 @@ describe('Browser and Node.js', function () {
     });
 
     it('can request a web page', function (done) {
-        request('https://openweathermap.org/api')
-          .get('/html')
+        request('https://openweathermap.org')
+          .get('/api')
           .end(function (err, res) {
             res.should.have.status(200);
             res.should.be.html;
