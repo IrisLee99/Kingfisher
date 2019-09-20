@@ -110,8 +110,8 @@ function  getWeatherToday (weather) {
 
     comments = "For city "+city+', country '+country;
 
-    //return message;
-    return comments;
+    console.log("weather message: " + message);
+    return message;
 }
 
 
@@ -124,6 +124,7 @@ function get5DayForecast (forecast) {
     }
         let message =   "  for city "+city+', country '+country;
 
+        console.log("forecast message: " + message);
         return message;
 }
 
