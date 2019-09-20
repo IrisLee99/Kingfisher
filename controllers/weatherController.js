@@ -4,7 +4,7 @@ const argv = require('yargs').argv;
 var express = require('express');
 var Promise = require("bluebird");
 
-let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
+const apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
 let country = 'China';                              //TODO: to be input - done
 let units = 'metric';

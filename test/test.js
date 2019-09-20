@@ -38,8 +38,9 @@ describe('Browser and Node.js', function () {
       });
 
     it('can request JSON data', function (done) {
-        request('https://openweathermap.org/api')
-          .get('/get')
+        let apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';
+        request('http://api.openweathermap.org/data/2.5/weather?q=')
+          .get('eastleigh' + '&appid=' + apiKey)
           .end(function (err, res) {
             res.should.have.status(200);
             res.should.be.json;
