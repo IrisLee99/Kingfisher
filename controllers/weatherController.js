@@ -74,6 +74,8 @@ const getBoth = function(req, res, next){
 
                     } else {
                         let comments = getWeatherToday(weather);
+                        console.log("JSON.body for weather: \r\n" 
+                                     + JSON.stringify(weather));
                         res.render('index', {body : weather, message : comments});
                     }
 
@@ -88,6 +90,8 @@ const getBoth = function(req, res, next){
                 
                 } else {
                     let comments = get5DayForecast(forecast);
+                    console.log("JSON.body for forecast: \r\n" 
+                                + JSON.stringify(forecast));
                     res.render('index', {body : forecast, message : comments});
                 }
 
