@@ -18,6 +18,7 @@ Usage:  1. npm start
         2. browse to http://localhost:3000/
         3. Input any city names and click 
 
+Test:  1. npm test
 
 #1. Get Weather by City Name
 node index.js -c {city}
