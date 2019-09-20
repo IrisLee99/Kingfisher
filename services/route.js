@@ -1,7 +1,6 @@
 import { getBoth, city } from '../controllers/weatherController.js';
 
 var express = require('express');
-var Promise = require("bluebird");
 const router = express.Router();
 
 var datetime = new Date();
