@@ -1,4 +1,4 @@
-import { getBoth, city } from '../controllers/weatherController.js';
+import { getBoth, city } from './controllers/weatherController.js';
 
 var express = require('express');
 const router = express.Router();

@@ -7,8 +7,7 @@ var path = require('path');
 //var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./services/route');
-//var users = require('./routes/users');
+var index = require('./route');
 
 const app = express();
 const port = 3000;
