@@ -1,16 +1,9 @@
 import { asyncGetWeather, getWeatherToday, get5DayForecast } from '../services/service.js';
 const argv = require('yargs').argv;
 const Joi = require('@hapi/joi');
-var express = require('express');
 
-const apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
 let country = 'China';                              //TODO: to be input - done
-let units = 'metric';
-let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
-let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
-
-var urlList = ["", ""];
 var datetime = new Date();
 
 const schema = Joi.object().keys({
@@ -27,18 +20,13 @@ const getBoth = function(req, res, next){
     const city = req.body.city;
     console.log("city: " + city);
 
-    let url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
-    let url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
-
-    var urlList = [url1, url2];
-
     const {error} = schema.validate({ city: city});        //simple city input valiation
 
         if (error) {
             next(error);
         } else {
 
-            let results = asyncGetWeather(urlList, city);    //calling service
+            let results = asyncGetWeather(city);    //calling service
 
             if (results == undefined) {
                 console.log("results is undefined");
@@ -47,8 +35,8 @@ const getBoth = function(req, res, next){
                 let forecast = results[1];    
                 let comments = '';            
 
-                console.log("weather:" + weather);
-                console.log("forecast:" + forecast);
+                console.log("controller.weather:" + weather);
+                console.log("controller.forecast:" + forecast);
 
                 if (weather == undefined || weather.coord == undefined) {
                     console.log("**RETURN WEATHER BODY EMPTY**");

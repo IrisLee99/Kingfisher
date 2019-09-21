@@ -1,34 +1,39 @@
 var Promise = require("bluebird");
+var request = require('request');
 var request = Promise.promisifyAll(require("request"), {multiArgs: true});
 const lib = require("../lib.js");
+const apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
+let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
+let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
+let units = 'metric';
+var express = require('express');
 
-const asyncGetWeather = async function(urlList, city) {
+var urlList = ["", ""];
 
-    console.log("/*In SERVICE*/");
-    console.log("urlList: " + urlList[0]);
-    console.log("urlList: " + urlList[1]);
+const asyncGetWeather = async function(city) {
 
-    Promise.map(urlList, url => {
+    console.log("/*In SERVICE*/ ");
+    let url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
+    let url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
+    var urlList = [url1, url2];
+    console.log("url1: " + url1);
+    console.log("url2: " + url2);
 
-        return request.getAsync(url).spread(function(response,body) {
+    const results = await Promise.map(urlList, url => {
+
+        const res =  request.getAsync(url);
+        res.spread((response,body) => {
             if(response.statusCode != 200){
                 next;
                 //throw new Error('error1:', response.statusCode);
             }else {
-                console.log("**respond**");
+                console.log("**IN RESPOND**");
                 console.log("body:" +  body);
                 return JSON.parse(body);
             }
-        });
-            
-    }).then(function(results) {
-        console.log("**IN THEN**:" + results[0]);
-        return results;    
-
-        }).catch(function(err) {
-            // handle error here
-            console.log('error:', err);
-        });
+        })    
+    });
+        return results;
 }
 
 function  getWeatherToday (weather, city) {
