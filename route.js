@@ -15,11 +15,9 @@ router.get('/', function(req, res, next) {
     //res.end();
    });
 
+router.post('/weather',getBoth );
 
 module.exports = router;
-
-router.post('/weather'  ,getBoth );
-
 //TODO: handle wrong city names: aaa   
 //TODO: move some functions outside of index.js - done
 //TODO: test with: mocha + chai

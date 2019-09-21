@@ -1,8 +1,7 @@
-const Joi = require('@hapi/joi');
-const lib = require("../lib.js");
+import { asyncGetWeather, getWeatherToday, get5DayForecast } from '../services/service.js';
 const argv = require('yargs').argv;
+const Joi = require('@hapi/joi');
 var express = require('express');
-var Promise = require("bluebird");
 
 const apiKey = 'a2f4ddd6b316804c8e4ce802525a2d7a';    //TODO: to be hidden
 let city = argv.c || 'Hangzhou';
@@ -11,7 +10,6 @@ let units = 'metric';
 let weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=';
 let forecast_url = 'http://api.openweathermap.org/data/2.5/forecast?q=';
 
-var request = Promise.promisifyAll(require("request"), {multiArgs: true});
 var urlList = ["", ""];
 var datetime = new Date();
 
@@ -34,101 +32,51 @@ const getBoth = function(req, res, next){
 
     var urlList = [url1, url2];
 
-    Promise.map(urlList, url => {
-        const {error} = schema.validate({ city: city});        //simple city input valiation
+    const {error} = schema.validate({ city: city});        //simple city input valiation
 
         if (error) {
             next(error);
-          } else {
+        } else {
 
-            let weather = null;
-            let forecast = null;
+            let results = asyncGetWeather(urlList, city);    //calling service
 
-            return request.getAsync(url).spread(function(response,body) {
-                if(response.statusCode != 200){
-                    next;
-                    //throw new Error('error1:', response.statusCode);
-                }else {
-                    console.log("**respond**");
-                    //console.log("body:" +  body);
-                    return JSON.parse(body);
-                }
-            });
-        }
-            
-        }).then(function(results) {
+            if (results == undefined) {
+                console.log("results is undefined");
+            }else {
+                let weather = results[0];
+                let forecast = results[1];    
+                let comments = '';            
 
-                if (results == undefined) {
-                    console.log("results is undefined");
-                }else {
-                    let weather = results[0];
-                    let forecast = results[1];                
+                console.log("weather:" + weather);
+                console.log("forecast:" + forecast);
 
-                    if (weather == undefined || weather.coord == undefined) {
-                        console.log("**RETURN WEATHER BODY EMPTY**");
-                        comments = "  " + city + "can't be found. Please input a valid city name";
+                if (weather == undefined || weather.coord == undefined) {
+                    console.log("**RETURN WEATHER BODY EMPTY**");
+                    comments = "  " + city + " can't be found. Please input a valid city name";
+                   res.render('../views/index', {body:'', message: comments});     //To do: warning message with red 
 
-                        res.render('.index', {body:'', message: comments});     //To do: warning message with red 
-
-                    return;
-
-                    } else {
-                        let comments = getWeatherToday(weather);
-                        console.log("JSON.body for weather: \r\n" 
-                                     + JSON.stringify(weather));
-                        res.render('index', {body : weather, message : comments});
-                    }
-
-            
-                if (forecast.list == undefined) {
-                    console.log("**RETURN FORECAST BODY EMPTY**");
-                    comments = " forecast " + city + "can't be found. Please check if API is working";
-
-                    res.render('index', {body:'', message: comments});     //To do: warning message with red 
-                    
-                    return;
-                
                 } else {
-                    let comments = get5DayForecast(forecast);
+                    comments = getWeatherToday(weather, city);
+                    console.log("JSON.body for weather: \r\n" 
+                                + JSON.stringify(weather));           
+                    res.render('../views/index', {body : weather, message : comments});
+                }
+
+            
+                if (forecast == undefined || forecast.list == undefined) {
+                    console.log("**RETURN FORECAST BODY EMPTY**");
+                    comments = " forecast " + city + " can't be found. Please check if API is working";
+                    res.render('../views/index', {body:'', message: comments});     //To do: warning message with red 
+                } else {
+                    comments = get5DayForecast(forecast, city);
                     console.log("JSON.body for forecast: \r\n" 
                                 + JSON.stringify(forecast));
-                    res.render('index', {body : forecast, message : comments});
+                    res.render('../views/index', {body : forecast, message : comments});
                 }
-
             }
 
-            }).catch(function(err) {
-                // handle error here
-                console.log('error:', err);
-            });
         }
-        
-function  getWeatherToday (weather) {
-    let comments = null;
-    //console.log(weather.coord);     //check if undefined
-    let country = (weather.sys.country) ? weather.sys.country : '' ;
-    let message = ` is ${weather.main.temp} degrees in ${weather.name}, ${country}!`;
-                    
-    console.log(message);
-
-    comments = "For city "+city+', country '+country;
-
-    console.log("weather message: " + message);
-    return message;
-}
-
-
-function get5DayForecast (forecast) {
-    var i;
-    //let msg = 'Forecast in 5 days: ';
-    for (i = 0; i < forecast.list.length; i++) { 
-        let date = lib.DateFormatter(forecast.list[i].dt);
-        //msg = msg +  `${forecast.list[i].main.temp} degrees in ${forecast.city.name} at ${date}, ${forecast.city.country}!`;               
     }
-        let message =   "  for city "+city+', country '+country;
+    
 
-        console.log("forecast message: " + message);
-        return message;
-}
-
-export {getBoth, city};
+export {getBoth, schema, city};
