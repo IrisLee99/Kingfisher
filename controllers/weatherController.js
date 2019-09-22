@@ -27,6 +27,9 @@ const getBoth = function(req, res, next){
         } else {
 
             let results = asyncGetWeather(city);    //calling service
+            console.log("after calling service");
+            console.log("returned result0: " + results[0]);
+            console.log("returned result1: " + results[1]);
 
             if (results == undefined) {
                 console.log("results is undefined");

@@ -16,13 +16,12 @@ const asyncGetWeather = async function(city) {
     let url1 = weather_url + city + "&units=" + units + "&appid=" + apiKey;   
     let url2 = forecast_url + city + "&units=" + units + "&appid=" + apiKey;  
     var urlList = [url1, url2];
-    console.log("url1: " + url1);
-    console.log("url2: " + url2);
+    //console.log("url1: " + url1);
+    //console.log("url2: " + url2);
 
-    const results = await Promise.map(urlList, url => {
+    await Promise.map(urlList, url => {
 
-        const res =  request.getAsync(url);
-        res.spread((response,body) => {
+        return request.getAsync(url).spread(function(response,body) { 
             if(response.statusCode != 200){
                 next;
                 //throw new Error('error1:', response.statusCode);
@@ -31,9 +30,18 @@ const asyncGetWeather = async function(city) {
                 console.log("body:" +  body);
                 return JSON.parse(body);
             }
-        })    
-    });
-        return results;
+        })
+            
+    });/*.then(function(results) {
+        //console.log("**IN THEN**:" + JSON.stringify(results[0]));
+        //console.log("**IN THEN**:" + JSON.stringify(results[1]));
+        return results;    
+
+    }).catch(function(err) {
+            // handle error here
+            console.log('error:', err);
+    });*/
+
 }
 
 function  getWeatherToday (weather, city) {
