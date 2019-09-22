@@ -26,45 +26,49 @@ const getBoth = function(req, res, next){
             next(error);
         } else {
 
-            let results = asyncGetWeather(city);    //calling service
-            console.log("after calling service");
-            console.log("returned result0: " + results[0]);
-            console.log("returned result1: " + results[1]);
-
-            if (results == undefined) {
-                console.log("results is undefined");
-            }else {
-                let weather = results[0];
-                let forecast = results[1];    
-                let comments = '';            
-
-                console.log("controller.weather:" + weather);
-                console.log("controller.forecast:" + forecast);
-
-                if (weather == undefined || weather.coord == undefined) {
-                    console.log("**RETURN WEATHER BODY EMPTY**");
-                    comments = "  " + city + " can't be found. Please input a valid city name";
-                   res.render('../views/index', {body:'', message: comments});     //To do: warning message with red 
-
-                } else {
-                    comments = getWeatherToday(weather, city);
-                    console.log("JSON.body for weather: \r\n" 
-                                + JSON.stringify(weather));           
-                    res.render('../views/index', {body : weather, message : comments});
-                }
-
+            asyncGetWeather(city)    //calling service
+            .then(function(results) {
+                
             
-                if (forecast == undefined || forecast.list == undefined) {
-                    console.log("**RETURN FORECAST BODY EMPTY**");
-                    comments = " forecast " + city + " can't be found. Please check if API is working";
+                if (results == undefined) {
+                    console.log("results is undefined");
+                }else {
+                    let weather = results[0];
+                    let forecast = results[1];    
+                    let comments = '';            
+
+                    console.log("controller.weather:" + weather);
+                    console.log("controller.forecast:" + forecast);
+
+                    if (weather == undefined || weather.coord == undefined) {
+                        console.log("**RETURN WEATHER BODY EMPTY**");
+                        comments = "  " + city + " can't be found. Please input a valid city name";
                     res.render('../views/index', {body:'', message: comments});     //To do: warning message with red 
-                } else {
-                    comments = get5DayForecast(forecast, city);
-                    console.log("JSON.body for forecast: \r\n" 
-                                + JSON.stringify(forecast));
-                    res.render('../views/index', {body : forecast, message : comments});
+
+                    } else {
+                        comments = getWeatherToday(weather, city);
+                        console.log("JSON.body for weather: \r\n" 
+                                    + JSON.stringify(weather));           
+                        res.render('../views/index', {body : weather, message : comments});
+                    }
+
+                
+                    if (forecast == undefined || forecast.list == undefined) {
+                        console.log("**RETURN FORECAST BODY EMPTY**");
+                        comments = " forecast " + city + " can't be found. Please check if API is working";
+                        res.render('../views/index', {body:'', message: comments});     //To do: warning message with red 
+                    } else {
+                        comments = get5DayForecast(forecast, city);
+                        console.log("JSON.body for forecast: \r\n" 
+                                    + JSON.stringify(forecast));
+                        res.render('../views/index', {body : forecast, message : comments});
+                    }
                 }
-            }
+
+            }).catch(function(err) {
+                // process error here
+                console.log('error:', err);
+            });
 
         }
     }
